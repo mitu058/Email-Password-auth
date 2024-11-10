@@ -13,11 +13,16 @@ const SignUp = () => {
     // rest error message
     setErrorMessage("");
     setSuccess(false);
-
     if (password.length < 6) {
       setErrorMessage("password must be at least 6 charecter or longer");
       return;
     }
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    if(!passwordRegex.test(password)){
+        setErrorMessage('At least one upperCase, one lowerCase, one number, one special charecter')
+        return;
+    }
+    
     // creat user with email and password
     createUserWithEmailAndPassword(auth, email, password)
       .then((result) => {
