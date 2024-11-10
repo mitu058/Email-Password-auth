@@ -1,11 +1,12 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
-import React, { useState } from "react";
+import { sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
+import React, { useRef, useState } from "react";
 import auth from "../firebase.init";
 import { Link } from "react-router-dom";
 
 const Login = () => {
   const [success, setSuccess] = useState(false);
   const [loginError, setLoginError] = useState("");
+const emailRef = useRef()
 
   const handelLogin = (e) => {
     e.preventDefault();
@@ -21,7 +22,14 @@ const Login = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((result) => {
         console.log(result.user);
-        setSuccess(true);
+        setSuccess(true)
+        // if(!result.user.emailVerified){
+        //     setLoginError('please verify your email address.')
+        // }
+        // else{
+
+        //     setSuccess(true);
+        // }
       })
       .catch((error) => {
         console.log("ERROR", error.message);
@@ -29,6 +37,20 @@ const Login = () => {
         setSuccess(false);
       });
   };
+
+const handelForgetPassword = () =>{
+    const email = emailRef.current.value
+    if(!email){
+        console.log('pleases provide a valid email address')
+    }
+    else{
+        sendPasswordResetEmail(auth, email)
+        .then(() =>{
+            alert('Password reset email sent!, check your email')
+        })
+    }
+}
+
   return (
     <div className="hero  min-h-screen">
       <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
@@ -42,6 +64,7 @@ const Login = () => {
               type="email"
               name="email"
               placeholder="email"
+              ref={emailRef}
               className="input input-bordered"
               required
             />
@@ -57,7 +80,7 @@ const Login = () => {
               className="input input-bordered"
               required
             />
-            <label className="label">
+            <label onClick={handelForgetPassword} className="label">
               <a href="#" className="label-text-alt link link-hover">
                 Forgot password?
               </a>
