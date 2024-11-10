@@ -2,6 +2,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import auth from "../firebase.init";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -12,14 +13,14 @@ const SignUp = () => {
     const email = e.target.email.value;
     const password = e.target.password.value;
     const terms = e.target.terms.checked;
-    console.log(email, password,terms);
+    console.log(email, password, terms);
     // rest error message
     setErrorMessage("");
     setSuccess(false);
-      if(!terms){
-        setErrorMessage('please accept our terms and conditions')
-        return
-      }
+    if (!terms) {
+      setErrorMessage("please accept our terms and conditions");
+      return;
+    }
 
     if (password.length < 6) {
       setErrorMessage("password must be at least 6 charecter or longer");
@@ -91,8 +92,14 @@ const SignUp = () => {
             {/* terms and consition */}
             <div className="form-control">
               <label className="label cursor-pointer justify-start">
-              <input type="checkbox" name="terms" className="checkbox  checkbox-sm" />
-                <span className="label-text ml-4">Accept our terms and conditions</span>
+                <input
+                  type="checkbox"
+                  name="terms"
+                  className="checkbox  checkbox-sm"
+                />
+                <span className="label-text ml-4">
+                  Accept our terms and conditions
+                </span>
               </label>
             </div>
             <div className="form-control mt-6">
@@ -107,6 +114,13 @@ const SignUp = () => {
               Successfully Sign Up
             </p>
           )}
+
+          <p className="text-center p-4 ">
+            Already have an account? please 
+            <Link className="ml-2" to="/login">
+              <u>Login</u>
+            </Link>
+          </p>
         </div>
       </div>
     </div>
